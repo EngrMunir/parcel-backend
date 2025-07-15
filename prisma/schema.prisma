@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  password String
+  role Role
+  createdAt DateTime @default(now())
+
+  parcels Parcel[] @relation("Sender")
+  assigned Parcel[] @relation("Agent")
+
+}
+
+model Parcel {
+  id String @id @default(uuid())
+  senderId String
+  agentId String?
+  receiverName String
+  pickupAddress String
+  deliveryAddress String
+  size String
+  type String
+  paymentType PaymentType
+  status ParcelStatus @default(PENDING)
+  createdAt DateTime @default(now())
+
+  sender User @relation("Sender", fields: [senderId], references: [id])
+  agent User? @relation("Agent",fields: [agentId], references: [id])
+  tracks ParcelTrack[]
+}
+
+model ParcelTrack {
+  id String @id @default(uuid())
+  parcelId String
+  status ParcelStatus
+  location String
+  updatedAt DateTime @default(now())
+
+  parcel Parcel @relation(fields: [parcelId], references: [id])
+}
+
+enum UserRole {
+  ADMIN
+  CUSTOMER
+  AGENT
+}
+
+enum PaymentType {
+  COD
+  PREPAID
+}
+
+enum ParcelStatus {
+  PENDING
+  PICKED_UP
+  IN_TRANSIT
+  DELIVERED
+  FAILED
+}
