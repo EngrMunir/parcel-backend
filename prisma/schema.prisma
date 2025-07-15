@@ -19,14 +19,29 @@ model User {
   name String
   email String @unique
   password String
-  role Role
+  role UserRole
   createdAt DateTime @default(now())
+  admin Admin?
 
   parcels Parcel[] @relation("Sender")
   assigned Parcel[] @relation("Agent")
 
 }
 
+model Admin {
+  id String @id @default(uuid())
+  name String
+  email String @unique
+  profilePhoto String?
+  contactNumber String
+  isDeleted Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [email], references: [email])
+
+  @@map("admins")
+}
 model Parcel {
   id String @id @default(uuid())
   senderId String
