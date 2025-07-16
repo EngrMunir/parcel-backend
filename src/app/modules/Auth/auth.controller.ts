@@ -36,7 +36,18 @@ const refreshToken = catchAsync(async(req:Request, res:Response) =>{
     })
 });
 
+const registerCustomer = catchAsync(async (req: Request, res: Response) => {
+  const result = await AuthServices.registerUser(req.body, 'CUSTOMER');
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: 'Customer registered successfully!',
+    data: result,
+  });
+});
+
 export const AuthController ={
     loginUser,
-    refreshToken
+    refreshToken,
+    registerCustomer
 }

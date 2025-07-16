@@ -3,6 +3,7 @@ import config from "../../../config";
 import { jwtHelpers } from "../../../helpers/jwtHelpers";
 import prisma from "../../../shared/prisma"
 import * as bcrypt from 'bcrypt';
+import { UserRole } from "../../../../generated/prisma";
 
 const loginUser = async(payload:{
     email:string,
@@ -20,6 +21,7 @@ const loginUser = async(payload:{
     }
 
     const accessToken = jwtHelpers.generateToken({
+        id: userData.id,
         email:userData.email,
         role:userData.role
     },
@@ -28,6 +30,7 @@ const loginUser = async(payload:{
 );
 
     const refreshToken = jwtHelpers.generateToken({
+        id: userData.id,
         email:userData.email,
         role:userData.role
     },
@@ -56,6 +59,7 @@ const refreshToken = async(token:string) =>{
     });
 
     const accessToken = jwtHelpers.generateToken({
+        id: userData.id,
         email:userData.email,
         role:userData.role
     },
@@ -68,7 +72,36 @@ return {
 }
 }
 
+const registerUser = async (payload: {
+  name: string;
+  email: string;
+  password: string;
+}, role: UserRole) => {
+  // 1. Hash password
+  const hashedPassword = await bcrypt.hash(payload.password, 12);
+
+  // 2. Create user
+  const newUser = await prisma.user.create({
+    data: {
+      name: payload.name,
+      email: payload.email,
+      password: hashedPassword,
+      role: role,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      createdAt: true,
+    },
+  });
+
+  return newUser;
+};
+
 export const AuthServices ={
     loginUser,
-    refreshToken
+    refreshToken,
+    registerUser
 }
