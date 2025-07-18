@@ -40,7 +40,13 @@ const loginUser = async(payload:{
 
 return {
     accessToken,
-    refreshToken
+    refreshToken,
+    user: {
+    id: userData.id,
+    email: userData.email,
+    role: userData.role,
+    name: userData.name
+  }
 };
 }
 
@@ -72,15 +78,15 @@ return {
 }
 }
 
-const registerUser = async (payload: {
+const registerCustomer = async (payload: {
   name: string;
   email: string;
   password: string;
 }, role: UserRole) => {
-  // 1. Hash password
+  
   const hashedPassword = await bcrypt.hash(payload.password, 12);
 
-  // 2. Create user
+  
   const newUser = await prisma.user.create({
     data: {
       name: payload.name,
@@ -103,5 +109,5 @@ const registerUser = async (payload: {
 export const AuthServices ={
     loginUser,
     refreshToken,
-    registerUser
+    registerCustomer
 }

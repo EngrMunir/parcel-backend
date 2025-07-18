@@ -1,28 +1,40 @@
-import { UserRole } from "../../../../generated/prisma";
-import * as bcrypt from 'bcrypt';
 import prisma from "../../../shared/prisma";
 
+const getUserById = async (id: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      email: true,
+      role: true,
+    },
+  });
 
-const createAdmin = async(data:any)=>{
-    const hashedPassword: string = await bcrypt.hash(data.password, 12)
-    const userData ={
-        email: data.admin.email,
-        password:hashedPassword,
-        role: UserRole.ADMIN
-    }
+  return user;
+};
 
-    const result = await prisma.$transaction(async(transactionClient) =>{
-        await transactionClient.user.create({
-            data:userData
-        });
-        const createAdminData = await transactionClient.admin.create({
-            data: data.admin
-        });
-        return createAdminData;
-    })
-    return result;
-}
+const getAllUsers = async (role?: string) => {
+  const filter: any = {};
+
+  if (role) {
+    filter.role = role;
+  }
+
+  const users = await prisma.user.findMany({
+    where: filter,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+    },
+  });
+
+  return users;
+};
+
 
 export const userService ={
-    createAdmin
+    getUserById,
+    getAllUsers
 }

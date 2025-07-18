@@ -1,22 +1,27 @@
 import express from 'express';
-import { userRoutes } from '../modules/User/user.routes';
-import { AdminRoutes } from '../modules/Admin/admin.routes';
 import { AuthRoutes } from '../modules/Auth/auth.route';
+import { userRoutes } from '../modules/User/user.route';
+import { ParcelRoutes } from '../modules/Parcel/parcel..route';
+import { AdminDashboardRoutes } from '../modules/Dashboard/dashboard.route';
 
 const router = express.Router();
 
 const moduleRoutes =[
     {
-        path:'/user',
+        path:'/users',
         route: userRoutes
-    },
-    {
-        path:'/admin',
-        route:AdminRoutes
     },
     {
         path:'/auth',
         route:AuthRoutes
+    },
+    {
+        path:'/parcels',
+        route:ParcelRoutes
+    },
+    {
+        path:"/dashboard", 
+        route: AdminDashboardRoutes
     }
 ];
 

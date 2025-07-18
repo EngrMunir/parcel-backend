@@ -4,10 +4,8 @@ import { AuthServices } from "./auth.service";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from 'http-status';
 
-
 const loginUser =  catchAsync(async(req:Request, res:Response) =>{
     const result = await AuthServices.loginUser(req.body);
-
     const { refreshToken } = result;
     res.cookie('refreshToken', refreshToken, {
         secure:false,
@@ -19,7 +17,8 @@ const loginUser =  catchAsync(async(req:Request, res:Response) =>{
         success:true,
         message:"Logged in successfully!",
         data:{
-            accessToken: result.accessToken
+            accessToken: result.accessToken,
+            user: result.user
         }
     })
 });
@@ -37,7 +36,7 @@ const refreshToken = catchAsync(async(req:Request, res:Response) =>{
 });
 
 const registerCustomer = catchAsync(async (req: Request, res: Response) => {
-  const result = await AuthServices.registerUser(req.body, 'CUSTOMER');
+  const result = await AuthServices.registerCustomer(req.body, 'CUSTOMER');
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
