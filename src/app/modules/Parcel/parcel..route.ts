@@ -42,11 +42,10 @@ router.patch(
 );
 
 router.get(
-  "/track/:id",
+  "/tracking/:parcelId",
   auth("CUSTOMER"),
   ParcelController.getTrackingInfo
 );
-
 
 router.get(
   '/',

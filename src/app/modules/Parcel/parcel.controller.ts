@@ -71,9 +71,9 @@ const updateStatus = catchAsync(async (req: Request & { user?: any }, res: Respo
     data: result,
   });
 });
-
+// checked
 const getTrackingInfo = catchAsync(async (req: Request & { user?: any }, res: Response) => {
-  const parcelId = req.params.id;
+  const parcelId = req.params.parcelId;
   const customerId = req.user?.id;
   const result = await ParcelService.getParcelTrackingInfo(parcelId, customerId);
 

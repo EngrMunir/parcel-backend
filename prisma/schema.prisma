@@ -54,6 +54,8 @@ model Parcel {
   paymentType PaymentType
   status ParcelStatus @default(PENDING)
   createdAt DateTime @default(now())
+  currentLatitude  Float?
+  currentLongitude Float?   
 
   sender User @relation("Sender", fields: [senderId], references: [id])
   agent User? @relation("Agent",fields: [agentId], references: [id])
