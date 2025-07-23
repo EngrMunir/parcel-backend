@@ -1,8 +1,8 @@
 import express from 'express';
 import { AuthRoutes } from '../modules/Auth/auth.route';
 import { userRoutes } from '../modules/User/user.route';
-import { ParcelRoutes } from '../modules/Parcel/parcel..route';
 import { AdminDashboardRoutes } from '../modules/Dashboard/dashboard.route';
+import { ParcelRoutes } from '../modules/Parcel/parcel.route';
 
 const router = express.Router();
 
