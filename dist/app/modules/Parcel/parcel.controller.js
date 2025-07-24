@@ -99,6 +99,17 @@ const getAllParcels = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         data: result,
     });
 }));
+const getOptimizedRoute = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const agentId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+    const result = yield parcel_service_1.ParcelService.getOptimizedRoute(agentId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Optimized delivery route generated successfully",
+        data: result,
+    });
+}));
 exports.ParcelController = {
     createParcel,
     getParcelsByCustomer,
@@ -106,5 +117,6 @@ exports.ParcelController = {
     getParcelsByAgent,
     updateStatus,
     getTrackingInfo,
-    getAllParcels
+    getAllParcels,
+    getOptimizedRoute
 };

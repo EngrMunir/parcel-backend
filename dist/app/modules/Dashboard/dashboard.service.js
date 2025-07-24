@@ -13,8 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DashboardService = void 0;
-const prisma_1 = __importDefault(require("../../../lib/prisma"));
 const dayjs_1 = __importDefault(require("dayjs"));
+const prisma_1 = __importDefault(require("../../../shared/prisma"));
 exports.DashboardService = {
     getDashboardStats: () => __awaiter(void 0, void 0, void 0, function* () {
         // Total parcels

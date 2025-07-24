@@ -21,7 +21,7 @@ const port = process.env.PORT || 5000;
 const server = (0, http_1.createServer)(app_1.default);
 exports.io = new socket_io_1.Server(server, {
     cors: {
-        origin: "http://localhost:5173",
+        origin: ["http://localhost:5173", "https://courier-rosy.vercel.app"],
         credentials: true,
     },
 });

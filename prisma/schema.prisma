@@ -84,6 +84,7 @@ enum PaymentType {
 }
 
 enum ParcelStatus {
+  ASSIGNED
   PENDING
   PICKED_UP
   IN_TRANSIT

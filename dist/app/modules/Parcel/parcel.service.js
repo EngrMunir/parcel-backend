@@ -170,6 +170,42 @@ const getAllParcels = () => __awaiter(void 0, void 0, void 0, function* () {
         },
     });
 });
+const axios_1 = __importDefault(require("axios"));
+const GOOGLE_MAPS_API_KEY = process.env.GOOGLE_MAPS_API_KEY || ""; // Use .env
+const getOptimizedRoute = (agentId) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d, _e;
+    // 1. Get all active parcels assigned to the agent
+    const parcels = yield prisma_1.default.parcel.findMany({
+        where: {
+            agentId,
+            status: {
+                in: ["ASSIGNED", "PICKED_UP", "IN_TRANSIT"], // you can adjust this
+            },
+        },
+        orderBy: {
+            createdAt: "asc",
+        },
+    });
+    if (!parcels.length)
+        return [];
+    // 2. Map all delivery addresses (you can also include pickup if needed)
+    const waypoints = parcels.map((p) => p.deliveryAddress);
+    // 3. Choose a start location (e.g., pickup of first parcel)
+    const origin = parcels[0].pickupAddress;
+    const destination = parcels[parcels.length - 1].deliveryAddress;
+    // 4. Build the request for Google Maps Directions API
+    const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&waypoints=optimize:true|${waypoints
+        .map((w) => encodeURIComponent(w))
+        .join("|")}&key=${GOOGLE_MAPS_API_KEY}`;
+    // 5. Call the API
+    const response = yield axios_1.default.get(url);
+    const optimizedRoute = response.data;
+    return {
+        optimizedOrder: ((_b = (_a = optimizedRoute.routes) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.waypoint_order) || [],
+        overviewPolyline: ((_e = (_d = (_c = optimizedRoute.routes) === null || _c === void 0 ? void 0 : _c[0]) === null || _d === void 0 ? void 0 : _d.overview_polyline) === null || _e === void 0 ? void 0 : _e.points) || "",
+        raw: optimizedRoute,
+    };
+});
 exports.ParcelService = {
     createParcel,
     assignAgentToParcel,
@@ -177,5 +213,6 @@ exports.ParcelService = {
     getParcelTrackingInfo,
     getParcelsByCustomer,
     getParcelsByAgent,
-    getAllParcels
+    getAllParcels,
+    getOptimizedRoute
 };

@@ -22,4 +22,5 @@ router.get("/agent/:id", (0, auth_1.default)("AGENT"), parcel_controller_1.Parce
 router.patch("/:id/status", (0, auth_1.default)("AGENT"), (0, validateRequest_1.default)(parcel_validation_1.updateStatusZodSchema), parcel_controller_1.ParcelController.updateStatus);
 router.get("/tracking/:parcelId", (0, auth_1.default)("CUSTOMER"), parcel_controller_1.ParcelController.getTrackingInfo);
 router.get('/', (0, auth_1.default)("ADMIN"), parcel_controller_1.ParcelController.getAllParcels);
+router.get("/agent/optimized-route", (0, auth_1.default)("AGENT"), parcel_controller_1.ParcelController.getOptimizedRoute);
 exports.ParcelRoutes = router;
