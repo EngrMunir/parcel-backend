@@ -53,4 +53,11 @@ router.get(
   ParcelController.getAllParcels
 );
 
+router.get(
+  "/agent/optimized-route",
+  auth("AGENT"),
+  ParcelController.getOptimizedRoute
+);
+
+
 export const ParcelRoutes = router;

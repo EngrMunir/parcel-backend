@@ -95,6 +95,18 @@ const getAllParcels = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getOptimizedRoute = catchAsync(async (req: Request & { user?: any }, res: Response) => {
+  const agentId = req.user?.id;
+  const result = await ParcelService.getOptimizedRoute(agentId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Optimized delivery route generated successfully",
+    data: result,
+  });
+});
+
 
 export const ParcelController ={
     createParcel,
@@ -103,5 +115,6 @@ export const ParcelController ={
     getParcelsByAgent,
     updateStatus,
     getTrackingInfo,
-    getAllParcels
+    getAllParcels,
+    getOptimizedRoute
 };
