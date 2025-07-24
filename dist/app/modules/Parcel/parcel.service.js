@@ -179,7 +179,7 @@ const getOptimizedRoute = (agentId) => __awaiter(void 0, void 0, void 0, functio
         where: {
             agentId,
             status: {
-                in: ["ASSIGNED", "PICKED_UP", "IN_TRANSIT"], // you can adjust this
+                in: ["ASSIGNED", "PICKED_UP", "IN_TRANSIT", "PENDING", "DELIVERED", "FAILED"],
             },
         },
         orderBy: {
